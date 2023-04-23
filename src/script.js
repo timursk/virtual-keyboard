@@ -1,3 +1,5 @@
+import rows from './data.js';
+
 function init() {
   const root = document.createElement('main');
   root.className = 'main';
@@ -22,6 +24,23 @@ function init() {
   root.append(info);
 
   document.body.append(root);
+
+  return {
+    root,
+    title,
+    textarea,
+    description,
+    info,
+  };
 }
 
-init();
+function initTextarea(container) {
+}
+
+const { textarea } = init();
+initTextarea(textarea);
+
+document.addEventListener('keydown', (e) => {
+  console.log(e);
+  // textarea.focus();
+});
