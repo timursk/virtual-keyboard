@@ -13,6 +13,11 @@ function init() {
   textarea.className = 'textarea';
   root.append(textarea);
 
+  const keyboard = document.createElement('div');
+  keyboard.className = 'keyboard';
+  root.append(keyboard);
+
+
   const description = document.createElement('p');
   description.className = 'description';
   description.innerHTML = 'Keyboard was created in the <b>Windows</b> OS';
@@ -29,16 +34,32 @@ function init() {
     root,
     title,
     textarea,
+    keyboard,
     description,
     info,
   };
 }
 
 function initTextarea(container) {
+  rows.forEach((rowData) => {
+    const rowContainer = document.createElement('div');
+    rowContainer.className = 'row';
+
+    rowData.forEach(({ui, shiftUi, switchUi, keyClass}) => {
+      const keyContainer = document.createElement('div');
+      keyContainer.className = `key ${keyClass}`;
+
+      // !!!
+
+      rowContainer.append(keyContainer);
+    });
+
+    container.append(rowContainer);
+  });
 }
 
-const { textarea } = init();
-initTextarea(textarea);
+const { keyboard } = init();
+initTextarea(keyboard);
 
 document.addEventListener('keydown', (e) => {
   console.log(e);
