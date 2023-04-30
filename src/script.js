@@ -45,12 +45,27 @@ function initTextarea(container) {
     const rowContainer = document.createElement('div');
     rowContainer.className = 'row';
 
-    rowData.forEach(({ui, shiftUi, switchUi, keyClass}) => {
+    rowData.forEach(({ui, shiftUi, switchUi, switchShiftUi, keyClass}) => {
       const keyContainer = document.createElement('div');
       keyContainer.className = `key ${keyClass}`;
 
-      // !!!
+      const engUi = document.createElement('span');
+      engUi.className = `eng`;
+      engUi.innerText = ui;
 
+      const rusUi = document.createElement('span');
+      rusUi.className = `rus hidden`;
+      rusUi.innerText = switchUi || ui;
+
+      const engShiftUi = document.createElement('span');
+      engShiftUi.className = `engShift hidden`;
+      engShiftUi.innerText = shiftUi || ui;
+
+      const rusShiftUi = document.createElement('span');
+      rusShiftUi.className = `rusShift hidden`;
+      rusShiftUi.innerText = switchShiftUi || shiftUi || ui;
+      
+      keyContainer.append(engUi, rusUi, engShiftUi, rusShiftUi);
       rowContainer.append(keyContainer);
     });
 

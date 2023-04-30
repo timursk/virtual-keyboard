@@ -4,12 +4,11 @@
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: monospace, monospace;
 }
 
 .main {
   min-height: 100vh;
-  min-width: 100vw;
   background-color: #fdfdfd;
 }
 
@@ -20,11 +19,18 @@ body {
 
 .textarea {
   display: block;
-  margin: 0 auto 15px;
+  outline: none;
+  margin: 0 auto 45px;
+  border-radius: 0.5em;
+  padding: 10px;
   min-width: 320px;
   max-width: 1280px;
   width: 60%;
   min-height: 150px;
+  background: rgb(33 33 33 / 90%);
+  box-shadow: rgba(50, 50, 50, 0.5) 0px 3px 10px;
+  color: rgb(193,204,204);
+  font-family: monospace, monospace;
 }
 
 .description,
@@ -34,4 +40,74 @@ body {
 
 .description {
   margin-bottom: 5px;
+}
+
+.keyboard {
+  margin: 0 auto 15px;
+  padding: 8px;
+  min-width: 320px;
+  max-width: 1280px;
+  width: 80%;
+  background: gray;
+  font-family: "Trebuchet MS", "Helvetica", sans-serif;
+}
+
+.row {
+  display: flex;
+  margin-bottom: 8px;
+  height: 40px;
+}
+
+.row:last-child {
+  margin-bottom: 0;
+}
+
+.key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
+  background-color: rgb(11, 11, 11);
+  color: white;
+}
+
+.row .key:last-child {
+  margin-right: 0;
+}
+
+.eng,
+.rus,
+.engShift,
+.rusShift {
+
+}
+
+.hidden {
+  display: none;
+}
+
+.Backspace {
+  width: 80px;
+}
+
+.Tab {
+  width: 48px;
+}
+
+.CapsLock,
+.ShiftLeft {
+  width: 88px;
+}
+
+.Enter,
+.ShiftRight,
+.Backspace {
+  width: 96px;
+}
+
+.Space {
+  width: 336px;
 }
