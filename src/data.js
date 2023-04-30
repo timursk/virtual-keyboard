@@ -76,7 +76,7 @@ const row4 = [
   {
     ui: '/', shiftUi: '?', switchUi: '.', keyClass: 'Slash',
   },
-  { ui: 'UP', keyClass: 'ArrowUp' },
+  { ui: '↑', keyClass: 'ArrowUp' },
   { ui: 'Shift', keyClass: 'ShiftRight' },
 ];
 
@@ -84,11 +84,11 @@ const row5 = [
   { ui: 'Ctrl', keyClass: 'ControlLeft' },
   { ui: 'Win', keyClass: 'MetaLeft' },
   { ui: 'Alt', keyClass: 'Alt' },
-  { ui: 'SPACE', keyClass: 'Space' },
+  { ui: '_____', keyClass: 'Space' },
   { ui: 'Alt', keyClass: 'AltRight' },
-  { ui: 'Left', keyClass: 'ArrowLeft' },
-  { ui: 'Down', keyClass: 'ArrowDown' },
-  { ui: 'Right', keyClass: 'ArrowRight' },
+  { ui: '←', keyClass: 'ArrowLeft' },
+  { ui: '↓', keyClass: 'ArrowDown' },
+  { ui: '→', keyClass: 'ArrowRight' },
   { ui: 'Ctrl', keyClass: 'ControlRight' },
 ];
 
