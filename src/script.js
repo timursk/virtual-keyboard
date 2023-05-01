@@ -64,7 +64,8 @@ function initKeyboard(container) {
       const rusShiftUi = document.createElement('span');
       rusShiftUi.className = `rusShift hidden`;
       rusShiftUi.innerText = switchShiftUi || shiftUi || 
-          (switchUi && switchUi.length === 1 ? switchUi.toUpperCase() : switchUi) || (ui.length === 1 ? ui.toUpperCase() : ui);
+          (switchUi && switchUi.length === 1 ? switchUi.toUpperCase() : switchUi) ||
+          (ui.length === 1 ? ui.toUpperCase() : ui);
       
       const engCaps = document.createElement('span');
       engCaps.className = `engCaps hidden`;
@@ -81,7 +82,7 @@ function initKeyboard(container) {
 
       const rusCapsShift = document.createElement('span');
       rusCapsShift.className = `rusCapsShift hidden`;
-      rusCapsShift.innerText = switchShiftUi || shiftUi || ui;
+      rusCapsShift.innerText = switchShiftUi || shiftUi || switchUi || ui;
       
       keyContainer.append(engUi, rusUi, engShiftUi, rusShiftUi, engCaps, rusCaps, engCapsShift, rusCapsShift);
       rowContainer.append(keyContainer);
@@ -93,18 +94,19 @@ function initKeyboard(container) {
 
 function updateKeyboard(container) {
   let activeClassName = '';
+  const { isEng, isRus, isCapsLock, isShift } = state;
 
-  if (state.isEng) {
+  if (isEng) {
     activeClassName += 'eng';
   }
-  else if (state.isRus) {
+  else if (isRus) {
     activeClassName += 'rus';
   }
 
-  if (state.isCapsLock) {
+  if (isCapsLock) {
     activeClassName += 'Caps';
   }
-  if (state.isShift) {
+  if (isShift) {
     activeClassName += 'Shift';
   }
 
@@ -124,6 +126,7 @@ function switchKeyboard(container, activeClassName) {
 
       for (let n = 0; n < keySymbols.length; n++) {
         const symbol = keySymbols[n];
+
         if (symbol.classList.contains(activeClassName)) {
           symbol.classList.remove('hidden');
         }
@@ -140,7 +143,7 @@ function insertInKeyboard(val) {
   const start = textarea.selectionStart;
   const end = textarea.selectionEnd;
   
-  textarea.value = textarea.value.slice(0, start) + val + textarea.value.slice(end);
+  textarea.value = `${textarea.value.slice(0, start)}${val}${textarea.value.slice(end)}`;
   textarea.selectionStart = textarea.selectionEnd = start + 1;
 }
 
@@ -149,17 +152,75 @@ function removeInKeyboard(isBack) {
   const start = textarea.selectionStart - (isBack ? 1 : 0);
   const end = textarea.selectionEnd + (!isBack ? 1 : 0);
   
-  textarea.value = textarea.value.slice(0, start) + textarea.value.slice(end);
+  textarea.value = `${textarea.value.slice(0, start)}${textarea.value.slice(end)}`;
   textarea.selectionStart = textarea.selectionEnd = start;
+}
+
+function onKeyPressed(keyClass, keyContainer) {
+  const isEnabled = keyContainer?.classList.contains('active');
+
+  if (keyClass === 'Tab') {
+    insertInKeyboard('\t');
+  }
+  else if (keyClass === 'CapsLock') {
+    state.isCapsLock = isEnabled;
+    updateKeyboard(keyboard);
+  }
+  else if ((keyClass === 'ShiftLeft') || (keyClass === 'ShiftRight')) {
+    state.isShift = isEnabled;
+    updateKeyboard(keyboard);
+  }
+  else if (keyClass === 'Enter') {
+    insertInKeyboard('\n');
+  }
+  else if (keyClass === 'Backspace') {
+    removeInKeyboard(true);
+  }
+  else if (keyClass === 'Delete') {
+    removeInKeyboard(false);    
+  }
+  else if ((keyClass === 'AltLeft') || (keyClass === 'AltRight')) {
+    if (state.isShift) {
+      state.isEng = !state.isEng; 
+      state.isRus = !state.isRus;
+      updateKeyboard(keyboard);
+
+      localStorage.setItem('lang', state.isEng ? 'eng' : 'rus');
+    }
+  }
+  else if ((keyClass === 'ControlLeft') || (keyClass === 'ControlRight')) {
+    // nothing
+  }
+  else if (keyClass === 'Space') {
+    insertInKeyboard(' ');
+  }
+  else if (keyClass === 'MetaLeft') {
+    // nothing 
+  }
+  else if (keyContainer) {
+    let val = '';
+    const keySymbols = keyContainer.children;
+    for (let i = 0; i < keySymbols.length; i++) {
+      const keySymbol = keySymbols[i];
+      if (keySymbol.classList.contains('hidden')) {
+        continue;
+      }
+
+      val = keySymbol.innerText;
+      break;
+    }
+
+    insertInKeyboard(val);
+  }
 }
 
 const state = {
   isShift: false,
   isCapsLock: false,
-  isCapsPressed: false,
   isEng: true,
   isRus: false,
 }
+
 const savedLang = localStorage.getItem('lang');
 if (savedLang === 'eng') {
   state.isEng = true;
@@ -175,48 +236,35 @@ initKeyboard(keyboard);
 updateKeyboard(keyboard);
 
 document.addEventListener('keydown', (e) => {
-  const keyClassName = e.code;
+  const { code: keyClassName, repeat } = e;
   
   if (keyClassName === 'CapsLock') {
-    if (!state.isCapsPressed) {
+    if (!repeat) {
       const keyboardKey = keyboard.querySelector(`.${keyClassName}`);
       keyboardKey.classList.toggle('active');
       state.isCapsLock = keyboardKey.classList.contains('active');
       updateKeyboard(keyboard);
-      state.isCapsPressed = true;
     }
     return;
   }
   else if ((keyClassName === 'ShiftRight') || (keyClassName === 'ShiftLeft')) {
-    if (!state.isShift) {
-      state.isShift = true;
+    if (!repeat) {
+      state.isShift = !state.isShift;
       updateKeyboard(keyboard);
-    }
-  }
-  else if (keyClassName === 'Tab') {
-    e.preventDefault();
-    insertInKeyboard('\t');
-  }
-  else if (keyClassName === 'AltLeft' || keyClassName === 'AltRight') {
-    if (e.shiftKey) {
-      state.isEng = !state.isEng; 
-      state.isRus = !state.isRus;
-      updateKeyboard(keyboard);
-
-      localStorage.setItem('lang', state.isEng ? 'eng' : 'rus');
     }
   }
   
+  e.preventDefault();
   textarea.focus();
   const keyboardKey = keyboard.querySelector(`.${keyClassName}`);
   keyboardKey?.classList.add('active');
+  onKeyPressed(keyClassName, keyboardKey);
 });
 
 document.addEventListener('keyup', (e) => {  
-  const keyClassName = e.code;
+  const { code: keyClassName } = e;
 
   if (keyClassName === 'CapsLock') {
-    state.isCapsPressed = false;
     return;  
   }
   else if ((keyClassName === 'ShiftRight') || (keyClassName === 'ShiftLeft')) {
@@ -248,53 +296,7 @@ keyboard.addEventListener('mousedown', (e) => {
   const isEnabled = keyContainer.classList.contains('active');
   const keyClass = keyContainer.classList[keyContainer.classList.length - (isEnabled ? 2 : 1)];
 
-  if (keyClass === 'Tab') {
-    insertInKeyboard('\t');
-  }
-  else if (keyClass === 'CapsLock') {
-    state.isCapsLock = isEnabled;
-    updateKeyboard(keyboard);
-  }
-  else if ((keyClass === 'ShiftLeft') || (keyClass === 'ShiftRight')) {
-    state.isShift = isEnabled;
-    updateKeyboard(keyboard);
-  }
-  else if (keyClass === 'Enter') {
-    insertInKeyboard('\n');
-  }
-  else if (keyClass === 'Backspace') {
-    removeInKeyboard(true);
-  }
-  else if (keyClass === 'Delete') {
-    removeInKeyboard(false);    
-  }
-  else if ((keyClass === 'AltLeft') || (keyClass === 'AltRight')) {
-    // nothing
-  }
-  else if ((keyClass === 'ControlLeft') || (keyClass === 'ControlRight')) {
-    // nothing
-  }
-  else if (keyClass === 'Space') {
-    insertInKeyboard(' ');
-  }
-  else if (keyClass === 'MetaLeft') {
-    // nothing 
-  }
-  else {
-    let val = '';
-    const keySymbols = keyContainer.children;
-    for (let i = 0; i < keySymbols.length; i++) {
-      const keySymbol = keySymbols[i];
-      if (keySymbol.classList.contains('hidden')) {
-        continue;
-      }
-
-      val = keySymbol.innerText;
-      break;
-    }
-
-    insertInKeyboard(val);
-  }
+  onKeyPressed(keyClass, keyContainer);
 });
 
 keyboard.addEventListener('mouseup', (e) => {
@@ -313,3 +315,5 @@ keyboard.addEventListener('mouseup', (e) => {
     lastClickedTarget = null;
   }
 });
+
+// TODO: на клик по клавишам сделать так же как и клик мышкой тк не все состояния сохраняются(например капс клавишой нажать а шифт мышкой)
