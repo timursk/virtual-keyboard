@@ -137,6 +137,7 @@ function switchKeyboard(container, activeClassName) {
 const state = {
   isShift: false,
   isCapsLock: false,
+  isCapsPressed: false,
   isEng: true,
   isRus: false,
 }
@@ -144,13 +145,16 @@ const { keyboard, textarea } = init();
 initKeyboard(keyboard);
 
 document.addEventListener('keydown', (e) => {
-  const keyClassName = e.code
-
+  const keyClassName = e.code;
+  
   if (keyClassName === 'CapsLock') {
-    const keyboardKey = keyboard.querySelector(`.${keyClassName}`);
-    keyboardKey.classList.toggle('active');
-    state.isCapsLock = keyboardKey.classList.contains('active');
-    updateKeyboard(keyboard);
+    if (!state.isCapsPressed) {
+      const keyboardKey = keyboard.querySelector(`.${keyClassName}`);
+      keyboardKey.classList.toggle('active');
+      state.isCapsLock = keyboardKey.classList.contains('active');
+      updateKeyboard(keyboard);
+      state.isCapsPressed = true;
+    }
     return;
   }
   else if ((keyClassName === 'ShiftRight') || (keyClassName === 'ShiftLeft')) {
@@ -164,20 +168,22 @@ document.addEventListener('keydown', (e) => {
     textarea.focus();
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
-
+    
     textarea.value = textarea.value.slice(0, start) + '\t' + textarea.value.slice(end);
     textarea.selectionStart = textarea.selectionEnd = start + 1;
+    
   }
   
   textarea.focus();
   const keyboardKey = keyboard.querySelector(`.${keyClassName}`);
-  keyboardKey.classList.add('active');
+  keyboardKey?.classList.add('active');
 });
 
 document.addEventListener('keyup', (e) => {  
   const keyClassName = e.code;
 
   if (keyClassName === 'CapsLock') {
+    state.isCapsPressed = false;
     return;  
   }
   else if ((keyClassName === 'ShiftRight') || (keyClassName === 'ShiftLeft')) {
