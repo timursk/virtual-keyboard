@@ -1,19 +1,19 @@
 const row1 = [
   {
-    ui: '`', shiftUi: '~', switchUi: 'ё', keyClass: 'Backquote',
+    ui: '`', shiftUi: '~', switchUi: 'ё', switchShiftUi: 'Ё', keyClass: 'Backquote',
   },
-  { ui: '1', shiftUi: '!', keyClass: 'Digit1' },
-  { ui: '2', shiftUi: '@', keyClass: 'Digit2' },
-  { ui: '3', shiftUi: '#', keyClass: 'Digit3' },
-  { ui: '4', shiftUi: '$', keyClass: 'Digit4' },
-  { ui: '5', shiftUi: '%', keyClass: 'Digit5' },
-  { ui: '6', shiftUi: '^', keyClass: 'Digit6' },
-  { ui: '7', shiftUi: '&', keyClass: 'Digit7' },
-  { ui: '8', shiftUi: '*', keyClass: 'Digit8' },
-  { ui: '9', shiftUi: '(', keyClass: 'Digit9' },
-  { ui: '0', shiftUi: ')', keyClass: 'Digit0' },
-  { ui: '-', shiftUi: '_', keyClass: 'Minus' },
-  { ui: '=', shiftUi: '+', keyClass: 'Equal' },
+  { ui: '1', shiftUi: '!', switchShiftUi: '!', keyClass: 'Digit1' },
+  { ui: '2', shiftUi: '@', switchShiftUi: '"', keyClass: 'Digit2' },
+  { ui: '3', shiftUi: '#', switchShiftUi: '№', keyClass: 'Digit3' },
+  { ui: '4', shiftUi: '$', switchShiftUi: ';', keyClass: 'Digit4' },
+  { ui: '5', shiftUi: '%', switchShiftUi: '%', keyClass: 'Digit5' },
+  { ui: '6', shiftUi: '^', switchShiftUi: ':', keyClass: 'Digit6' },
+  { ui: '7', shiftUi: '&', switchShiftUi: '?', keyClass: 'Digit7' },
+  { ui: '8', shiftUi: '*', switchShiftUi: '*', keyClass: 'Digit8' },
+  { ui: '9', shiftUi: '(', switchShiftUi: '(', keyClass: 'Digit9' },
+  { ui: '0', shiftUi: ')', switchShiftUi: ')', keyClass: 'Digit0' },
+  { ui: '-', shiftUi: '_', switchShiftUi: '_', keyClass: 'Minus' },
+  { ui: '=', shiftUi: '+', switchShiftUi: '+', keyClass: 'Equal' },
   { ui: 'Backspace', keyClass: 'Backspace' }];
 
 const row2 = [

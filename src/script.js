@@ -25,7 +25,7 @@ function init() {
 
   const info = document.createElement('p');
   info.className = 'info';
-  info.innerHTML = 'Language switch combination: <b>Left Shift + Alt</b>';
+  info.innerHTML = 'Language switch combination: hold <b>Left Shift + Alt</b>';
   root.append(info);
 
   document.body.append(root);
@@ -63,7 +63,8 @@ function initKeyboard(container) {
 
       const rusShiftUi = document.createElement('span');
       rusShiftUi.className = `rusShift hidden`;
-      rusShiftUi.innerText = switchShiftUi || shiftUi || (ui.length === 1 ? ui.toUpperCase() : ui);
+      rusShiftUi.innerText = switchShiftUi || shiftUi || 
+          (switchUi && switchUi.length === 1 ? switchUi.toUpperCase() : switchUi) || (ui.length === 1 ? ui.toUpperCase() : ui);
       
       const engCaps = document.createElement('span');
       engCaps.className = `engCaps hidden`;
@@ -159,8 +160,19 @@ const state = {
   isEng: true,
   isRus: false,
 }
+const savedLang = localStorage.getItem('lang');
+if (savedLang === 'eng') {
+  state.isEng = true;
+  state.isRus = false;
+}
+else if (savedLang === 'rus') {
+  state.isEng = false;
+  state.isRus = true;
+}
+
 const { keyboard, textarea } = init();
 initKeyboard(keyboard);
+updateKeyboard(keyboard);
 
 document.addEventListener('keydown', (e) => {
   const keyClassName = e.code;
@@ -184,6 +196,15 @@ document.addEventListener('keydown', (e) => {
   else if (keyClassName === 'Tab') {
     e.preventDefault();
     insertInKeyboard('\t');
+  }
+  else if (keyClassName === 'AltLeft' || keyClassName === 'AltRight') {
+    if (e.shiftKey) {
+      state.isEng = !state.isEng; 
+      state.isRus = !state.isRus;
+      updateKeyboard(keyboard);
+
+      localStorage.setItem('lang', state.isEng ? 'eng' : 'rus');
+    }
   }
   
   textarea.focus();
