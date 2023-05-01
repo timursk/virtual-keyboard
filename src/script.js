@@ -134,6 +134,24 @@ function switchKeyboard(container, activeClassName) {
   }
 }
 
+function insertInKeyboard(val) {
+  textarea.focus();
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  
+  textarea.value = textarea.value.slice(0, start) + val + textarea.value.slice(end);
+  textarea.selectionStart = textarea.selectionEnd = start + 1;
+}
+
+function removeInKeyboard(isBack) {
+  textarea.focus();
+  const start = textarea.selectionStart - (isBack ? 1 : 0);
+  const end = textarea.selectionEnd + (!isBack ? 1 : 0);
+  
+  textarea.value = textarea.value.slice(0, start) + textarea.value.slice(end);
+  textarea.selectionStart = textarea.selectionEnd = start;
+}
+
 const state = {
   isShift: false,
   isCapsLock: false,
@@ -165,13 +183,7 @@ document.addEventListener('keydown', (e) => {
   }
   else if (keyClassName === 'Tab') {
     e.preventDefault();
-    textarea.focus();
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    
-    textarea.value = textarea.value.slice(0, start) + '\t' + textarea.value.slice(end);
-    textarea.selectionStart = textarea.selectionEnd = start + 1;
-    
+    insertInKeyboard('\t');
   }
   
   textarea.focus();
@@ -194,5 +206,89 @@ document.addEventListener('keyup', (e) => {
   }
   
   const keyboardKey = keyboard.querySelector(`.${keyClassName}`);
-  keyboardKey.classList.remove('active');
+  keyboardKey?.classList.remove('active');
+});
+
+let lastClickedTarget = null;
+
+keyboard.addEventListener('mousedown', (e) => {
+  const { target } = e;
+  const { parentElement } = target;
+  const isTargetKey = target.classList.contains('key'); 
+  const isParentKey = parentElement.classList.contains('key'); 
+
+  if (!isTargetKey && !isParentKey) {
+    return;
+  }
+
+  const keyContainer = isTargetKey ? target : parentElement;
+  lastClickedTarget = keyContainer;
+  keyContainer.classList.toggle('active');
+  const isEnabled = keyContainer.classList.contains('active');
+  const keyClass = keyContainer.classList[keyContainer.classList.length - (isEnabled ? 2 : 1)];
+
+  if (keyClass === 'Tab') {
+    insertInKeyboard('\t');
+  }
+  else if (keyClass === 'CapsLock') {
+    state.isCapsLock = isEnabled;
+    updateKeyboard(keyboard);
+  }
+  else if ((keyClass === 'ShiftLeft') || (keyClass === 'ShiftRight')) {
+    state.isShift = isEnabled;
+    updateKeyboard(keyboard);
+  }
+  else if (keyClass === 'Enter') {
+    insertInKeyboard('\n');
+  }
+  else if (keyClass === 'Backspace') {
+    removeInKeyboard(true);
+  }
+  else if (keyClass === 'Delete') {
+    removeInKeyboard(false);    
+  }
+  else if ((keyClass === 'AltLeft') || (keyClass === 'AltRight')) {
+    // nothing
+  }
+  else if ((keyClass === 'ControlLeft') || (keyClass === 'ControlRight')) {
+    // nothing
+  }
+  else if (keyClass === 'Space') {
+    insertInKeyboard(' ');
+  }
+  else if (keyClass === 'MetaLeft') {
+    // nothing 
+  }
+  else {
+    let val = '';
+    const keySymbols = keyContainer.children;
+    for (let i = 0; i < keySymbols.length; i++) {
+      const keySymbol = keySymbols[i];
+      if (keySymbol.classList.contains('hidden')) {
+        continue;
+      }
+
+      val = keySymbol.innerText;
+      break;
+    }
+
+    insertInKeyboard(val);
+  }
+});
+
+keyboard.addEventListener('mouseup', (e) => {
+  if (lastClickedTarget && lastClickedTarget.classList.contains('active')) {
+    if (lastClickedTarget.classList.contains('CapsLock')) {
+      // nothing
+    }
+    else if (lastClickedTarget.classList.contains('ShiftLeft') || lastClickedTarget.classList.contains('ShiftRight')) {
+      state.isShift = !state.isShift;
+      updateKeyboard(keyboard);
+      lastClickedTarget.classList.remove('active');
+    }
+    else {
+      lastClickedTarget.classList.remove('active');
+    }
+    lastClickedTarget = null;
+  }
 });

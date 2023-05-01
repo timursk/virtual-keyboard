@@ -83,7 +83,7 @@ const row4 = [
 const row5 = [
   { ui: 'ctrl', keyClass: 'ControlLeft' },
   { ui: 'win', keyClass: 'MetaLeft' },
-  { ui: 'alt', keyClass: 'Alt' },
+  { ui: 'alt', keyClass: 'AltLeft' },
   { ui: '_____', keyClass: 'Space' },
   { ui: 'alt', keyClass: 'AltRight' },
   { ui: '←', keyClass: 'ArrowLeft' },
