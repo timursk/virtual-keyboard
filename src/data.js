@@ -17,7 +17,7 @@ const row1 = [
   { ui: 'Backspace', keyClass: 'Backspace' }];
 
 const row2 = [
-  { ui: 'Tab', keyClass: 'Tab' },
+  { ui: 'tab', keyClass: 'Tab' },
   { ui: 'q', switchUi: 'й', keyClass: 'KeyQ' },
   { ui: 'w', switchUi: 'ц', keyClass: 'KeyW' },
   { ui: 'e', switchUi: 'у', keyClass: 'KeyE' },
@@ -35,11 +35,11 @@ const row2 = [
     ui: ']', shiftUi: '}', switchUi: 'ъ', keyClass: 'BracketRight',
   },
   { ui: '\\', shiftUi: '|', keyClass: 'Backslash' },
-  { ui: 'Del', keyClass: 'Del' },
+  { ui: 'del', keyClass: 'Delete' },
 ];
 
 const row3 = [
-  { ui: 'CapsLock', keyClass: 'CapsLock' },
+  { ui: 'capslock', keyClass: 'CapsLock' },
   { ui: 'a', switchUi: 'ф', keyClass: 'KeyA' },
   { ui: 's', switchUi: 'ы', keyClass: 'KeyS' },
   { ui: 'd', switchUi: 'в', keyClass: 'KeyD' },
@@ -55,11 +55,11 @@ const row3 = [
   {
     ui: "'", shiftUi: '"', switchUi: 'э', keyClass: 'Quote',
   },
-  { ui: 'Enter', keyClass: 'Enter' },
+  { ui: 'enter', keyClass: 'Enter' },
 ];
 
 const row4 = [
-  { ui: 'Shift', keyClass: 'ShiftLeft' },
+  { ui: 'shift', keyClass: 'ShiftLeft' },
   { ui: 'z', switchUi: 'я', keyClass: 'KeyZ' },
   { ui: 'x', switchUi: 'ч', keyClass: 'KeyX' },
   { ui: 'c', switchUi: 'с', keyClass: 'KeyC' },
@@ -77,19 +77,19 @@ const row4 = [
     ui: '/', shiftUi: '?', switchUi: '.', keyClass: 'Slash',
   },
   { ui: '↑', keyClass: 'ArrowUp' },
-  { ui: 'Shift', keyClass: 'ShiftRight' },
+  { ui: 'shift', keyClass: 'ShiftRight' },
 ];
 
 const row5 = [
-  { ui: 'Ctrl', keyClass: 'ControlLeft' },
-  { ui: 'Win', keyClass: 'MetaLeft' },
-  { ui: 'Alt', keyClass: 'Alt' },
+  { ui: 'ctrl', keyClass: 'ControlLeft' },
+  { ui: 'win', keyClass: 'MetaLeft' },
+  { ui: 'alt', keyClass: 'Alt' },
   { ui: '_____', keyClass: 'Space' },
-  { ui: 'Alt', keyClass: 'AltRight' },
+  { ui: 'alt', keyClass: 'AltRight' },
   { ui: '←', keyClass: 'ArrowLeft' },
   { ui: '↓', keyClass: 'ArrowDown' },
   { ui: '→', keyClass: 'ArrowRight' },
-  { ui: 'Ctrl', keyClass: 'ControlRight' },
+  { ui: 'ctrl', keyClass: 'ControlRight' },
 ];
 
 const rows = [row1, row2, row3, row4, row5];

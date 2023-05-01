@@ -45,11 +45,10 @@ body {
 .keyboard {
   margin: 0 auto 15px;
   border-radius: 5px;
-  padding: 8px;
+  padding: 8px 12px;
   width: 720px;
   background: rgb(40,40,40);
   font-family: "Trebuchet MS", "Helvetica", sans-serif;
-  text-transform: lowercase;
 }
 
 .row {
@@ -80,7 +79,7 @@ body {
   background-color: rgba(71, 179, 84, 0.5);
 }
 
-.active {
+.key.active {
   background-color: rgb(71,179,83);
 }
 
@@ -97,6 +96,10 @@ body {
 
 .hidden {
   display: none;
+}
+
+.CapsLock {
+  position: relative;
 }
 
 .Backspace {
